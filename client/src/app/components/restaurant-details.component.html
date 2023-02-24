@@ -18,6 +18,6 @@
         <textarea formControlName="text" cols="30" rows="10">Add your comment</textarea>
         <br>
         <button type="button" [routerLink]="['/',restaurant.cuisine,'restaurants']">Back</button>
-        <button type="submit" [disabled]="form.invalid">Submit</button>
+        <button type="submit" [disabled]="form.invalid || form.pristine">Submit</button>
     </form>
 </div>
