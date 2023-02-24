@@ -1,0 +1,7 @@
+<h1>List of {{cuisine}} Restaurants</h1>
+<ul>
+    <li *ngFor="let restaurant of restaurantNameAndIDArray" [routerLink]="['/restaurant',restaurant.id]">
+        {{restaurant.name}}
+    </li>
+</ul>
+<button type="button" [routerLink]="['/']">back</button>

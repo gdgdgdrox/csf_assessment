@@ -1,0 +1,21 @@
+TODO: Task 1 - Write the mongo import command here
+mongoimport -dfood -crestaurants --jsonArray "C:\Users\gdfoo\Desktop\csf-assessment-template\restaurants.json"
+
+//queries
+db.restaurants.distinct('cuisine')
+
+
+
+db.restaurants.aggregate([
+  {
+    $match: {"restaurant_id":"30191841"}
+  },
+  {
+    $project:{
+      name:1, "restaurant_id":1, cuisine:1, "address.coord":1, 
+      address: {
+        $concat: ["$address.building", "(",", "$address.street")"]
+      }
+    }
+  }
+  ])
