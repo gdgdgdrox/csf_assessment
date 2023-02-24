@@ -43,19 +43,14 @@ public class RestaurantController {
 
     @GetMapping(path="/{cuisine}/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getRestaurantsByCuisine(@PathVariable String cuisine){
-        System.out.println("IN GET RESTAURANTS BY CUISINE CONTROLLER");
-        System.out.println("cuisine" + cuisine);
         List<Document> restaurantsDocs = restaurantSvc.getRestaurantsByCuisine(cuisine);
         JsonArray restaurantsArray = Utils.createRestaurantsArray(restaurantsDocs);
         String response = Utils.createResponse("restaurants", restaurantsArray).toString();
         return ResponseEntity.ok(response);
-        // return null;
     }
 
     @GetMapping(path="/restaurant", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getRestaurantByID(@RequestParam String id){
-        System.out.println("IN GET RESTAURANT BY ID CONTROLLER");
-        System.out.println("RESTAURANT ID > " + id);
         Optional<Restaurant> optRestaurant = restaurantSvc.getRestaurant(id);
         if (optRestaurant.isEmpty()){
             String errorResponse = Utils.createJsonResponse("error", "unable to find restaurant with id > ".formatted(id)).toString();
@@ -67,8 +62,6 @@ public class RestaurantController {
 
     @PostMapping(path="/comments", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> saveComment(@RequestBody String comment){
-        // System.out.println("IN POST COMMENT CONTROLLER");
-        // System.out.println("COMMENT > " + comment);
         ObjectMapper objMapper = new ObjectMapper();
         try {
             Comment commentObj = objMapper.readValue(comment, Comment.class);

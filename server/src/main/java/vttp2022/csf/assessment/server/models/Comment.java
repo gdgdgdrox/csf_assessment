@@ -35,14 +35,4 @@ public class Comment {
 		return this.text;
 	}
 
-	@Override
-	public String toString() {
-		return "{" +
-			" name='" + getName() + "'" +
-			", rating='" + getRating() + "'" +
-			", restaurantId='" + getRestaurantId() + "'" +
-			", text='" + getText() + "'" +
-			"}";
-	}
-
 }

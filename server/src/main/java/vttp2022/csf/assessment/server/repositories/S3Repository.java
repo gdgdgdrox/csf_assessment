@@ -25,7 +25,6 @@ public class S3Repository {
         try {
             PutObjectRequest putObjReq = new PutObjectRequest("gd-bucket-top-secret", key, imageIS, objMetaData );
             putObjReq.withCannedAcl(CannedAccessControlList.PublicRead);
-            System.out.println("PUTTING IMAGE INTO S3");
             s3Client.putObject(putObjReq);
             imageUrl = "https://gd-bucket-top-secret.sgp1.digitaloceanspaces.com/%s".formatted(key);
         } catch (Exception e) {

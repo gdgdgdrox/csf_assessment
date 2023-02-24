@@ -66,20 +66,17 @@ public class RestaurantRepository {
 	/*
 	 * db.restaurants.aggregate([
 		{
-			$match: {"restaurant_id":"30191841"}
+			$match: {"restaurant_id":"?"}
 		},
 		{
 			$project:{
-			name:1, "restaurant_id":1, cuisine:1, "address.coord":1, 
-			address: {
-				$concat: ["$address.building", "(",", "$address.street")"]
+			_id:0, name:1, "restaurant_id":1, cuisine:1, coordinates:"$address.coord", address:{
+				$concat: ["$address.building", ",", "$address.street", ",", "$address.zipcode", ",", "$borough"]
 			}
 			}
 		}
   ])
 	 */
-
-	//!!!  TODO : write the aggregation query with $concat !!!
 	public Optional<Restaurant> getRestaurant(String id) {
 		MatchOperation matchOp = Aggregation.match(Criteria.where("restaurant_id").is(id));
 		ProjectionOperation projectOp = Aggregation.project("name", "restaurant_id","cuisine").andExclude("_id")
@@ -91,13 +88,11 @@ public class RestaurantRepository {
 					.concat(",").concatValueOf("borough"))
 					.as("address");
 		Aggregation agg = Aggregation.newAggregation(matchOp, projectOp);
-		System.out.println("RUNNING AGGREGATE QUERY IN MONGO");
 		AggregationResults<Document> aggResults = mongoTemplate.aggregate(agg, COLLECTION_RESTAURANTS, Document.class);
 		if (null == aggResults.getMappedResults().get(0)){
 			return Optional.empty();
 		}
 		Document restaurantDetail = aggResults.getMappedResults().get(0);
-		System.out.println(restaurantDetail);
 		Restaurant r = Utils.createRestaurant(restaurantDetail);
 		return Optional.of(r);
 	}
@@ -106,13 +101,12 @@ public class RestaurantRepository {
 	// Use this method to insert a comment into the restaurant database
 	// DO NOT CHNAGE THE METHOD'S NAME OR THE RETURN TYPE
 	// Write the Mongo native query above for this method
+
 	//  db.comments.insertOne({name:'?', rating:?, restaurantId:"?", text:"?"})
 	public void addComment(Comment comment) {
 		Document doc = Utils.toDocument(comment);
 		mongoTemplate.insert(doc, COLLECTION_COMMENTS);
-		
 	}
 	
-	// You may add other methods to this class
 
 }

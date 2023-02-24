@@ -19,14 +19,4 @@ public class LatLng {
 		return this.longitude;
 	}
 
-	// NOTE TO SELF : REMEMBERB TO DELETE THIS BEFORE PUSHING TO GIT
-	//forgive me if i forget
-	@Override
-	public String toString() {
-		return "{" +
-			" latitude='" + getLatitude() + "'" +
-			", longitude='" + getLongitude() + "'" +
-			"}";
-	}
-
 }

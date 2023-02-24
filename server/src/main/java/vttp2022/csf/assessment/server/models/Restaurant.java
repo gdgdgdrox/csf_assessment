@@ -51,21 +51,6 @@ public class Restaurant {
 	public String getMapURL() {
 		return this.mapUrl;
 	}
-	// NOTE TO SELF : REMEMBERB TO DELETE THIS BEFORE PUSHING TO GIT
-	//forgive me if i forget
-
-	@Override
-	public String toString() {
-		return "{" +
-			" restaurantId='" + getRestaurantId() + "'" +
-			", name='" + getName() + "'" +
-			", cuisine='" + getCuisine() + "'" +
-			", address='" + getAddress() + "'" +
-			", coordinates='" + getCoordinates() + "'" +
-			", mapUrl='" + getMapURL() + "'" +
-			"}";
-	}
-
 
 
 }

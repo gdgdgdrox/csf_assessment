@@ -65,22 +65,20 @@ public class RestaurantService {
 		Optional<Restaurant> optRest = restaurantRepo.getRestaurant(id);
 		Restaurant r = optRest.get();
 
-		//check if Spaces already contain image, else call Chuk's API
 		boolean imageExists = mapCache.imageExists(id);
-		if (!imageExists){
-			System.out.println("Image %s does not exist".formatted(id));
 
-			//get coords and call Chuk's API to get a byte[] representation of the map
+		//image does not exist in Spaces
+		if (!imageExists){
+			//get coords so that we can call Chuk's API
 			LatLng latLng = r.getCoordinates();
 			byte[] imageBytes = getMap(latLng);
 
 			//store image in Spaces
 			String imageUrl = s3Repo.storeImageInS3(imageBytes, r.getRestaurantId());
-			// System.out.println("IMAGE URL " + imageUrl);
 
-			//add imageUrl to restaurantDocument and return result
+			//add imageUrl to the response
 			r.setMapURL(imageUrl);
-			// System.out.println("FULLY FORMULATED RESTAURANT OBJ " + r );
+
 			return Optional.of(r);
 			}
 		else{
@@ -90,7 +88,6 @@ public class RestaurantService {
 			r.setMapURL(imageUrl);
 			return Optional.of(r);
 		}
-
 		
 	}
 
@@ -103,8 +100,7 @@ public class RestaurantService {
 	//
 	// You may add other methods to this class
 
-	// GET /map?lat=<latitude>&lng=<longitude>
-	// Accept:image/png
+
 	public byte[] getMap(LatLng latLng){
 		String baseUrl = "http://map.chuklee.com/map";
 		String fullUrl = UriComponentsBuilder.fromUriString(baseUrl)
@@ -112,14 +108,8 @@ public class RestaurantService {
 							.queryParam("lng", latLng.getLongitude())
 							.toUriString();
 	
-		System.out.println("FULL URL %s".formatted(fullUrl));
-		// RequestEntity<> req = RequestEntity.get(fullUrl).accept(MediaType.IMAGE_PNG).build();
-		//set headers to accept:image/png?
 		RestTemplate restTemp = new RestTemplate();
-		System.out.println("CALLING CHUK'S API");
 		ResponseEntity<byte[]> rs= restTemp.exchange(RequestEntity.get(fullUrl).accept(MediaType.IMAGE_PNG).build(), byte[].class);
-		System.out.println(rs.getBody());
-		// ResponseEntity<byte[]> respEntity = restTemp.getForEntity(fullUrl, byte[].class);
 		return rs.getBody();
 	}
 }
