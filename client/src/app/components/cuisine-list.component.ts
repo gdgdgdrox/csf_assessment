@@ -13,9 +13,7 @@ export class CuisineListComponent implements OnInit{
   ngOnInit(): void {
     this.restaurantSvc.getCuisineList()
       .then((response:any) => {
-        console.log(response);
         this.cuisines = response['cuisines'];
-        console.log(this.cuisines);
       })
       .catch(error => console.log(error))
   }

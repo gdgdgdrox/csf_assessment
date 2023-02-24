@@ -16,17 +16,12 @@ export class RestaurantCuisineComponent implements OnInit{
 
   ngOnInit(): void {
     this.cuisine = this.activatedRoute.snapshot.params['cuisine'];
-    console.log(`cuisine requested> ${this.cuisine}`);
     this.restaurantSvc.getRestaurantsByCuisine(this.cuisine).then((response:any) => {
-      console.log((response));
       this.restaurantNameAndIDArray = response.restaurants as RestaurantNameAndID[];
 
     })
     .catch(error => console.log(error))
   }
 
-
-	// TODO Task 3
-	// For View 2
 
 }

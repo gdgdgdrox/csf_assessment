@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { Restaurant, Comment } from './models'
@@ -21,7 +21,6 @@ export class RestaurantService {
 	// You can add any parameters (if any) and the return type 
 	// DO NOT CHNAGE THE METHOD'S NAME
 	public getRestaurantsByCuisine(cuisine: string) {
-		console.log(`cuisine in service > ${cuisine}`);
 		return firstValueFrom(this.httpClient.get(`/api/${cuisine}/restaurants`));
 
 	}
@@ -38,8 +37,9 @@ export class RestaurantService {
 	// TODO Task 5
 	// Use this method to submit a comment
 	// DO NOT CHANGE THE METHOD'S NAME OR SIGNATURE
-	// public postComment(comment: Comment): Promise<any> {
+	public postComment(comment: Comment): Promise<any> {
 	// 	// Implememntation in here
-	// 	return new Promise<>();
-	// }
+		const headers = new HttpHeaders().set('content-type','application/json');
+		return firstValueFrom(this.httpClient.post('/api/comments', comment, {headers}));
+	}
 }

@@ -7,6 +7,9 @@ export interface Restaurant {
 	cuisine: string
 	address: string
 	coordinates: number[]
+
+	//temporarily added this imageUrl, pending response from Chuk before i remove
+	image: string
 }
 
 export interface Comment {

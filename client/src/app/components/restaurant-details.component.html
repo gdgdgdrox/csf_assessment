@@ -3,5 +3,21 @@
     <p><strong>Name: </strong>{{restaurant.name}}</p>
     <p><strong>Cuisine: </strong>{{restaurant.cuisine}}</p>
     <p><strong>Address: </strong>{{restaurant.address}}</p>
-    <img [src]="restaurant" alt="">
+    <img [src]="restaurant.image" alt="image">
+</div>
+<hr>
+<div class="the-form">
+    <h3>Comment</h3>
+    <form [formGroup]="form" (ngSubmit)="postComment()">
+        <label for="name">Name: </label>
+        <input type="text" id="name" formControlName="name">
+        <br>
+        <label for="rating">Rating: </label>
+        <input type="number" id="rating" min="1" max="5" formControlName="rating">
+        <br>
+        <textarea formControlName="text" cols="30" rows="10">Add your comment</textarea>
+        <br>
+        <button type="button" [routerLink]="['/',restaurant.cuisine,'restaurants']">Back</button>
+        <button type="submit" [disabled]="form.invalid">Submit</button>
+    </form>
 </div>
