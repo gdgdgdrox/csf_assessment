@@ -14,7 +14,7 @@
 	<name>server</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>19</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -65,6 +65,12 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>2.4.0-b180830.0359</version>
 		</dependency>
+		<dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.3</version>
+        </dependency>
+
 	</dependencies>
 
 	<build>

@@ -26,6 +26,7 @@ public class RestaurantRepository {
 	private MongoTemplate mongoTemplate;
 
 	private static final String COLLECTION_RESTAURANTS = "restaurants";
+	private static final String COLLECTION_COMMENTS = "comments";
 
 	// TODO Task 2
 	// Use this method to retrive a list of cuisines from the restaurant collection
@@ -36,9 +37,7 @@ public class RestaurantRepository {
 	//  db.restaurants.distinct('cuisine')
 	public List<String> getCuisines() {
 		List<String> rs = mongoTemplate.findDistinct(new Query(), "cuisine", COLLECTION_RESTAURANTS, String.class);
-
 		return rs;
-
 	}
 
 	// TODO Task 3
@@ -107,9 +106,10 @@ public class RestaurantRepository {
 	// Use this method to insert a comment into the restaurant database
 	// DO NOT CHNAGE THE METHOD'S NAME OR THE RETURN TYPE
 	// Write the Mongo native query above for this method
-	//  
+	//  db.comments.insertOne({name:'?', rating:?, restaurantId:"?", text:"?"})
 	public void addComment(Comment comment) {
-		// Implmementation in here
+		Document doc = Utils.toDocument(comment);
+		mongoTemplate.insert(doc, COLLECTION_COMMENTS);
 		
 	}
 	

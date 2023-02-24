@@ -1,7 +1,6 @@
 package vttp2022.csf.assessment.server.repositories;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;

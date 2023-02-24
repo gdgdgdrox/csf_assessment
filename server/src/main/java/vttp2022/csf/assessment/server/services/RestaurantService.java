@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import vttp2022.csf.assessment.server.Utils;
 import vttp2022.csf.assessment.server.models.Comment;
 import vttp2022.csf.assessment.server.models.LatLng;
 import vttp2022.csf.assessment.server.models.Restaurant;
@@ -31,7 +30,6 @@ public class RestaurantService {
 
 	@Autowired
 	private S3Repository s3Repo;
-
 
 	// TODO Task 2 
 	// Use the following method to get a list of cuisines 
@@ -65,31 +63,42 @@ public class RestaurantService {
 	// DO NOT CHNAGE THE METHOD'S NAME OR THE RETURN TYPE
 	public Optional<Restaurant> getRestaurant(String id) {
 		Optional<Restaurant> optRest = restaurantRepo.getRestaurant(id);
+		Restaurant r = optRest.get();
 
 		//check if Spaces already contain image, else call Chuk's API
+		boolean imageExists = mapCache.imageExists(id);
+		if (!imageExists){
+			System.out.println("Image %s does not exist".formatted(id));
 
+			//get coords and call Chuk's API to get a byte[] representation of the map
+			LatLng latLng = r.getCoordinates();
+			byte[] imageBytes = getMap(latLng);
 
-		//get coords and call Chuk's API to get a byte[] representation of the map
-		Restaurant r = optRest.get();
-		LatLng latLng = r.getCoordinates();
-		byte[] imageBytes = getMap(latLng);
+			//store image in Spaces
+			String imageUrl = s3Repo.storeImageInS3(imageBytes, r.getRestaurantId());
+			// System.out.println("IMAGE URL " + imageUrl);
 
-		//store image in Spaces
-		String imageUrl = s3Repo.storeImageInS3(imageBytes, r.getRestaurantId());
-		System.out.println("IMAGE URL " + imageUrl);
+			//add imageUrl to restaurantDocument and return result
+			r.setMapURL(imageUrl);
+			// System.out.println("FULLY FORMULATED RESTAURANT OBJ " + r );
+			return Optional.of(r);
+			}
+		else{
+			//image is in Spaces. Retrieve it.
+			System.out.println("Image %s exist. Retrieving image url from Spaces".formatted(id));
+			String imageUrl = "https://gd-bucket-top-secret.sgp1.digitaloceanspaces.com/%s".formatted(id);
+			r.setMapURL(imageUrl);
+			return Optional.of(r);
+		}
 
-		//add imageUrl to restaurantDocument and return result
-		r.setMapURL(imageUrl);
-		System.out.println("FULLY FORMULATED RESTAURANT OBJ " + r );
-		return Optional.of(r);
+		
 	}
 
 	// TODO Task 5
 	// Use this method to insert a comment into the restaurant database
 	// DO NOT CHNAGE THE METHOD'S NAME OR THE RETURN TYPE
 	public void addComment(Comment comment) {
-		// Implmementation in here
-		
+		restaurantRepo.addComment(comment);
 	}
 	//
 	// You may add other methods to this class

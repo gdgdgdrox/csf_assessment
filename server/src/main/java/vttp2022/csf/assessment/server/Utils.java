@@ -8,6 +8,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import vttp2022.csf.assessment.server.models.Comment;
 import vttp2022.csf.assessment.server.models.LatLng;
 import vttp2022.csf.assessment.server.models.Restaurant;
 
@@ -24,7 +25,7 @@ public class Utils {
         return Json.createObjectBuilder().add(key, value).build();
     }
 
-    public static JsonObject createErrorResponse(String key, String message){
+    public static JsonObject createJsonResponse(String key, String message){
         return Json.createObjectBuilder().add(key, message).build();
     }
 
@@ -84,6 +85,17 @@ public class Utils {
 
     public static JsonArray latLngArray(LatLng latLng){
         return Json.createArrayBuilder().add(latLng.getLongitude()).add(latLng.getLatitude()).build();
+    }
+
+    public static Document toDocument(Comment c){
+        Document doc = new Document();
+        //name='gdgdgd', rating='1', restaurantId='40860020', text='hahah'
+        doc.put("name", c.getName());
+        doc.put("rating", c.getRating());
+        doc.put("restaurantId", c.getRestaurantId());
+        doc.put("text", c.getText());
+        System.out.println("COMMENT DOC > " + doc);
+        return doc;
     }
 
 }
